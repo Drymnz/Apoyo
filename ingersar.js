@@ -50,8 +50,12 @@ function parser(params) {
         }
         const data = dataLine[i].split(',');
         for (let j = 0; j < fielNames.length; j++) {
-            const asNumber = Number(data[j]);//intenta convertir a numero
-            obj[fielNames[j].toString()] = (isNaN(asNumber)) ? data[j] : asNumber;//ingres el dato
+            if (data[j]=== "") {
+                obj[fielNames[j].toString()] = "0";//ingres el dato
+            }else{
+                const asNumber = Number(data[j]);//intenta convertir a numero
+                obj[fielNames[j].toString()] = (isNaN(asNumber)) ? data[j] : asNumber;//ingres el dato
+            }
         }
         objList.push(obj);
     }
@@ -94,21 +98,78 @@ function pintara(objList, cabezera) {
     ///
 
     $(document).ready(() => {
-        $('th').hover(function() {
+        $('th').hover(function () {
             let indiceColumna = $(this).parent().children().index(this);
             $(this).addClass('resaltar');
-
             $(`table td:nth-child(${indiceColumna + 1})`).addClass('resaltar');
-        }, function() {
+        }, function () {
             $('table tr').children().removeClass('resaltar');
         });
 
-        $('th').click(function() {
+        $('th').click(function () {
             $(this).hide();
-
             let indiceColumna = $(this).parent().children().index(this);
-
-            $(`table td:nth-child(${indiceColumna + 1})`).hide();
+            $(`table td:nth-child(${indiceColumna + 1})`).remove();
+            $(this).remove();
         });
     });
+
+    $(document).ready(() => {
+        $('tbody tr').hover(function () {
+            $(this).find('td').addClass('resaltar');
+        }, function () {
+            $(this).find('td').removeClass('resaltar');
+        });
+
+        $('tbody tr').click(function () {
+            //let indiceColumna = $(this).parent().children().index(this);
+            if ($(this).parent().children().index(this) > 0) {
+                $(this).hide();
+            }
+        });
+    });
+}
+
+
+function table_CSV() {
+
+    var csv_data = [];
+
+    var rows = document.getElementsByTagName('tr');
+    for (var i = 0; i < rows.length; i++) {
+
+        var cols = rows[i].querySelectorAll('td,th');
+
+        var csvrow = [];
+        for (var j = 0; j < cols.length; j++) {
+
+            csvrow.push(cols[j].innerHTML);
+        }
+
+        csv_data.push(csvrow.join(","));
+    }
+
+    csv_data = csv_data.join('\n');
+
+    descargaCSV(csv_data);
+
+}
+
+function descargaCSV(csv_data) {
+
+    CSVFile = new Blob([csv_data], {
+        type: "text/csv"
+    });
+
+    var temp_link = document.createElement('a');
+
+    temp_link.download = "baulphp.csv";
+    var url = window.URL.createObjectURL(CSVFile);
+    temp_link.href = url;
+
+    temp_link.style.display = "none";
+    document.body.appendChild(temp_link);
+
+    temp_link.click();
+    document.body.removeChild(temp_link);
 }
