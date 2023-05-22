@@ -1,10 +1,16 @@
 
+let nameFile = "baulphp.csv";
+
 function leerArchivo(e) {
     var archivo = e.target.files[0];
     if (!archivo) {
         return;
     }
-    var lector = new FileReader();
+    var lector = new FileReader();    
+    var  text = document.getElementById("file-input").value;
+    var contener = text.split('\\');
+    nameFile = "FINAL - "+contener[contener.length-1];
+    //console.log(contener[contener.length-1]); //"C:\fakepath\exito.txt"
     lector.onload = function (e) {
         var contenido = e.target.result;
         parser(contenido);
@@ -114,7 +120,7 @@ function pintara(objList, cabezera) {
         });
     });
 
-    $(document).ready(() => {
+   /*  $(document).ready(() => {
         $('tbody tr').hover(function () {
             $(this).find('td').addClass('resaltar');
         }, function () {
@@ -127,7 +133,7 @@ function pintara(objList, cabezera) {
                 $(this).hide();
             }
         });
-    });
+    }); */
 }
 
 
@@ -163,7 +169,7 @@ function descargaCSV(csv_data) {
 
     var temp_link = document.createElement('a');
 
-    temp_link.download = "baulphp.csv";
+    temp_link.download = nameFile;
     var url = window.URL.createObjectURL(CSVFile);
     temp_link.href = url;
 
