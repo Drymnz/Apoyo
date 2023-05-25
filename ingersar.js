@@ -51,10 +51,12 @@ function parser(params) {
 
     for (let i = 0; i < dataLine.length; i++) {
         let obj = {};//new object
+        console.log(dataLine[i]);
         if (dataLine[i] === "") {
             continue;
         }
         const data = dataLine[i].split(',');
+        
         for (let j = 0; j < fielNames.length; j++) {
             if (data[j]=== "") {
                 obj[fielNames[j].toString()] = "0";//ingres el dato
