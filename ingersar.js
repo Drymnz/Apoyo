@@ -1,5 +1,17 @@
 
-let nameFile = "baulphp.csv";
+let nameFile = "baulphp.csv";// nombre del cvs
+var lecutraPrimerArchivo= undefined;
+var lecutraSegudoArchivo= undefined;
+
+var archivosUno = undefined;
+var archivosDos = undefined;
+
+
+
+// en escucha 
+document.getElementById('file-input-one').addEventListener('change', leerArchivo, false);
+document.getElementById('file-input-two').addEventListener('change', leerArchivo, false);
+
 
 function leerArchivo(e) {
     var archivo = e.target.files[0];
@@ -7,24 +19,30 @@ function leerArchivo(e) {
         return;
     }
     var lector = new FileReader();    
-    var  text = document.getElementById("file-input").value;
-    var contener = text.split('\\');
-    nameFile = "FINAL - "+contener[contener.length-1];
-    //console.log(contener[contener.length-1]); //"C:\fakepath\exito.txt"
+    lecutraPrimerArchivo = document.getElementById("file-input-one").value;
+    lecutraSegudoArchivo = document.getElementById("file-input-two").value;
+
     lector.onload = function (e) {
         var contenido = e.target.result;
         parser(contenido);
     };
-    lector.readAsText(archivo);
+
+    if (lecutraPrimerArchivo != '' && lecutraSegudoArchivo != '') {
+        var contener = lecutraPrimerArchivo.split('\\');
+        nameFile = "FINAL - "+contener[contener.length-1];//console.log(contener[contener.length-1]); //"C:\fakepath\exito.txt"
+
+        lector.onload = function (e) {
+            var contenido = e.target.result;
+            parser(contenido);
+        };
+        lector.readAsText(archivo); 
+    }
 }
 
 function mostrarContenido(contenido) {
     var elemento = document.getElementById('contenido-archivo');
     elemento.innerHTML = contenido;
 }
-
-document.getElementById('file-input').addEventListener('change', leerArchivo, false);
-
 
 
 function parser(params) {
@@ -51,7 +69,7 @@ function parser(params) {
 
     for (let i = 0; i < dataLine.length; i++) {
         let obj = {};//new object
-        console.log(dataLine[i]);
+        //console.log(dataLine[i]);
         if (dataLine[i] === "") {
             continue;
         }
@@ -68,8 +86,8 @@ function parser(params) {
         objList.push(obj);
     }
 
-    const jsonText = JSON.stringify(objList, null, 2);
-    pintara(objList, fielNames)
+    //const jsonText = JSON.stringify(objList, null, 2);
+    pintara(objList, fielNames);
     //const outPutFile = filename.replace(".csv", ".json");
     //fs.writeFileSync(outPutFile, jsonText);
     //mostrarContenido(jsonText);
